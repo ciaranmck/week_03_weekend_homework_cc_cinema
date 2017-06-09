@@ -11,6 +11,21 @@ class Film
     @price = options['price']
   end
 
+  def self.all()
+    sql = "SELECT * FROM films"
+    return film.map_items(sql)
+  end
+
+  def delete_all()
+    sql = "DELETE * FROM films"
+    SqlRunner.run(sql)
+  end
+
+  def self.map_items(sql)
+    film_hashes = SqlRunner.run(sql)
+    result = film_hashes.map {|film_hash| Film.new(film_hash)}
+    return result
+  end
 
 
 

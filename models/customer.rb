@@ -12,6 +12,22 @@ class Customer
   @funds = options['funds']
   end
 
+  def self.all() 
+    sql = "SELECT * FROM customers"
+    return customer.map_items(sql)
+  end
+
+  def self.delete_all()
+    sql = "DELETE * FROM customers"
+    SqlRunner.run(sql)
+  end
+
+  def self.map_items(sql)
+    customer_hashes = SqlRunner.run(sql)
+    result = customer_hashes.map {|customer_hash| Customer.new(customer_hash)}
+    return result
+  end
+
 
 
 
