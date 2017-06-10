@@ -36,8 +36,8 @@ class Ticket
     return ticket.map_items(sql)
   end
 
-  def delete_all()
-    sql = "DELETE * FROM tickets"
+  def self.delete_all()
+    sql = "DELETE FROM tickets"
     SqlRunner.run(sql)
   end
 
