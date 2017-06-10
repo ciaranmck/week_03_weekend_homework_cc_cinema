@@ -18,8 +18,13 @@ class Customer
     @id = customer['id'].to_i
   end
 
+  def update()
+    sql = ("UPDATE customer SET (name, funds) = ('#{@name}', #{@funds} WHERE id = #{@id}")
+    SqlRunner.run(sql)
+  end
+
   def films() 
-    sql = "SELECT films.* FROM films INNER JOIN tickets ON tickets.film_id = films.id WHERE tickets.customer_id = {@id};"
+    sql = "SELECT films.* FROM films INNER JOIN tickets ON tickets.film_id = films.id WHERE tickets.customer_id = #{@id};"
     film_hashes = SqlRunner.run(sql)
     result = film_hashes.map {|film_hash| Film.new(film_hash)}
     return result
