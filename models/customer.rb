@@ -12,6 +12,21 @@ class Customer
   @funds = options['funds']
   end
 
+  def save()
+    sql = "INSERT INTO customers (name, funds) VALUES ('#{@name}', '#{@funds}') RETURNING id"
+    customer = SqlRunner.run(sql).first
+    @id = customer['id'].to_i
+  end
+
+  def films() 
+    sql = "SELECT films.* FROM films INNER JOIN tickets ON tickets.film_id = films.id WHERE tickets.customer_id = {@id};"
+    film_hashes = SqlRunner.run(sql)
+    result = film_hashes.map {|film_hash| Film.new(film_hash)}
+    return result
+  end
+
+  # -------- class methods ------
+
   def self.all() 
     sql = "SELECT * FROM customers"
     return customer.map_items(sql)
