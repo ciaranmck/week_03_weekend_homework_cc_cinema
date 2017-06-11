@@ -18,7 +18,7 @@ class Ticket
   end
 
   def update()
-    sql = "UPDATE (customer_id, film_id) = (#{customer_id}, #{film_id} WHERE id = #{@id}"
+    sql = "UPDATE tickets SET (customer_id, film_id) = (#{customer_id}, #{film_id} WHERE id = #{@id}"
     SqlRunner.run(sql)
   end
 
@@ -33,6 +33,11 @@ class Ticket
     film_hash = SqlRunner.run(sql).first()
     return Film.new(film_hash)
   end
+
+  # Test method for charging customers below 
+
+  # Look into the RETURNING command in SQL
+
 
   # -------- class methods ------
 

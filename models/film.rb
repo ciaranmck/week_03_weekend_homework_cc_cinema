@@ -12,13 +12,13 @@ class Film
   end
 
   def save()
-    sql = "INSERT INTO films (title, price) VALUES ('#{@title}', '#{@price}') RETURNING id"
+    sql = "INSERT INTO films (title, price) VALUES ('#{@title}', #{@price}) RETURNING id"
     film = SqlRunner.run(sql).first
     @id = film['id'].to_i
   end
 
   def update()
-    sql = "UPDATE (title, price) = ('#{@title}', #{@price} WHERE id = #{@id})"
+    sql = "UPDATE films SET (title, price) = ('#{@title}', #{@price} WHERE id = #{@id})"
     SqlRunner.run(sql)
   end
 
@@ -29,6 +29,11 @@ class Film
     return result
   end
 
+  def customer_count
+    sql = "SELECT COUNT (tickets.film_id) FROM tickets WHERE tickets.film_id = #{@id};"
+    count = SqlRunner.run(sql)[0]
+    return count
+  end
   # -------- class methods ------
 
   def self.all()

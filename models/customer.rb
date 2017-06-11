@@ -19,7 +19,7 @@ class Customer
   end
 
   def update()
-    sql = ("UPDATE customer SET (name, funds) = ('#{@name}', #{@funds} WHERE id = #{@id}")
+    sql = ("UPDATE customers SET (name, funds) = ('#{@name}', #{@funds} WHERE id = #{@id}")
     SqlRunner.run(sql)
   end
 
@@ -30,10 +30,32 @@ class Customer
     return result
   end
 
+  # Test method for charging customers below 
+
+  # Look into the RETURNING command in SQL
+
+  def update_funds
+      sql = "SELECT films.price, customers.funds FROM films
+        INNER JOIN tickets
+        ON tickets.film_id = films.id
+        INNER JOIN customers
+        ON customers.id = tickets.customer_id
+        WHERE tickets.customer_id = #{@id};"
+      result_hash = SqlRunner.run(sql)[0]
+      result = result_hash["funds"].to_i - result_hash["price"].to_i
+      return result
+  end
+
+  def ticket_count
+    sql = "SELECT COUNT (tickets.customer_id) FROM tickets WHERE tickets.customer_id = #{@id};"
+    count = SqlRunner.run(sql)[0]
+    return count
+  end
+
   # -------- class methods ------
 
   def self.all() 
-    sql = "SELECT * FROM customers"
+    sql = "SELECT * FROM customers;"
     return customer.map_items(sql)
   end
 
